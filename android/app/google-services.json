@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "124914797818",
+    "project_id": "photo-sharing-app-24e2d",
+    "storage_bucket": "photo-sharing-app-24e2d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:124914797818:android:9e5643a9397d8d6f814d43",
+        "android_client_info": {
+          "package_name": "com.example.photo_sharing_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "124914797818-9f1hi68eq9slpmocudkrnhrhblmfs5mk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBP2SxeMyt9D2uzllRKZQ0J8dKNzvrUfc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "124914797818-9f1hi68eq9slpmocudkrnhrhblmfs5mk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
