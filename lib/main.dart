@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:photo_sharing_app/responsive/mobile_screen_layout.dart';
 import 'package:photo_sharing_app/responsive/responsive_layout_screen.dart';
 import 'package:photo_sharing_app/responsive/web_screen_layout.dart';
+import 'package:photo_sharing_app/screens/login_screen.dart';
+import 'package:photo_sharing_app/screens/signup_screen.dart';
 import 'package:photo_sharing_app/utils/colors.dart';
 import 'package:firebase_core/firebase_core.dart';
 // C:\Users\isi.751FJW2\AppData\Local\Pub\Cache\bin
@@ -31,14 +33,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Insta Share ',
+      title: 'photogram',
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: mobileBackgroundColor,
       ),
-      home:const ResponsiveLayout(
-        mobileScreenLayout:MobileScreenLayout() ,
-        webScreenLayout: WebScreenLayout() ,
-      ),
+      // home:const ResponsiveLayout(
+      //   mobileScreenLayout:MobileScreenLayout() ,
+      //   webScreenLayout: WebScreenLayout() ,
+      // ),
+      home: SignupScreen(),
     );
   }
 }
