@@ -1,6 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:photo_sharing_app/resources/auth_methods.dart';
 import 'package:photo_sharing_app/utils/colors.dart';
+import 'package:photo_sharing_app/utils/utils.dart';
 import 'package:photo_sharing_app/widgets/text_field_input.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -16,6 +21,8 @@ class _SignupScreen extends State<SignupScreen> {
   final TextEditingController _reEnterPassword = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
+  Uint8List? _image;
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -25,6 +32,35 @@ class _SignupScreen extends State<SignupScreen> {
     _bioController.dispose();
     _usernameController.dispose();
     _reEnterPassword.dispose();
+  }
+
+  void selectImage() async {
+    Uint8List image = await pickImage(ImageSource.gallery);
+    setState(() {
+      _image = image;
+    });
+  }
+
+  void signUpUser() async {
+    setState(() {
+      _isLoading = true;
+    });
+    String res = await AuthMethods().signUpUser(
+        email: _emailController.text,
+        password: _passwordController.text,
+        userName: _usernameController.text,
+        bio: _bioController.text,
+        file: _image!); //this means image not null
+    print(res);
+
+    setState(() {
+      _isLoading = false;
+    });
+    if (res != 'success') {
+      showSnackBar(res, context);
+    } else {
+      showSnackBar('Profile Created', context);
+    }
   }
 
   @override
@@ -49,21 +85,28 @@ class _SignupScreen extends State<SignupScreen> {
               ),
 
               const SizedBox(
-                height: 64,
+                height: 32,
               ),
-              // a circular widget to add
+              // a circular widget to add photo
               Stack(
                 children: [
-                 const CircleAvatar(
-                    radius: 64,
-                    backgroundImage: NetworkImage(
-                        'https://images.unsplash.com/photo-1657653464532-3e3015daa4a7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80'),
-                  ),
+                  // ternary operator
+                  _image != null
+                      ? CircleAvatar(
+                          radius: 64,
+                          backgroundImage: MemoryImage(_image!),
+                        )
+                      : const CircleAvatar(
+                          radius: 64,
+                          backgroundImage: NetworkImage(
+                              'https://images.unsplash.com/photo-1657653464532-3e3015daa4a7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80'),
+                        ),
+
                   Positioned(
-                    bottom: -10,
+                      bottom: -10,
                       left: 80,
                       child: IconButton(
-                          onPressed: () {},
+                          onPressed: selectImage,
                           icon: const Icon(Icons.add_a_photo)))
                 ],
               ),
@@ -118,8 +161,15 @@ class _SignupScreen extends State<SignupScreen> {
 
               // the button
               InkWell(
+                onTap: signUpUser,
                 child: Container(
-                  child: const Text('Sign Up'),
+                  child: _isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: primaryColor,
+                          ),
+                        )
+                      : const Text('Sign Up'),
                   width: double.infinity,
                   alignment: Alignment.center,
                   padding: const EdgeInsets.symmetric(vertical: 12),
