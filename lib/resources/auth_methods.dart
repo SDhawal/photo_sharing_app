@@ -10,13 +10,12 @@ class AuthMethods {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
   // function for sign up the user.
-  Future<String> signUpUser({
-    required String email,
-    required String password,
-    required String userName,
-    required String bio,
-    required Uint8List file
-  }) async {
+  Future<String> signUpUser(
+      {required String email,
+      required String password,
+      required String userName,
+      required String bio,
+      required Uint8List file}) async {
     String res = "Some Error Occurred";
     try {
       if (email.isNotEmpty ||
@@ -56,6 +55,30 @@ class AuthMethods {
         res = "success";
       }
     } catch (err) {
+      res = err.toString();
+    }
+    return res;
+  }
+
+  // logging in the user
+  Future<String> loginUser(
+      {required String email, required String password}) async {
+    String res = "Some error occurred while logging in";
+    try {
+      if (email.isNotEmpty || password.isNotEmpty) {
+        await _auth.signInWithEmailAndPassword(
+            email: email, password: password);
+        res = "Success";
+      } else {
+        res = "Please enter all the fields";
+      }
+    }
+    // } on FirebaseAuthException catch(e){
+    //   if(e.code == "user-not-found"){
+    //
+    //   }
+    // }
+    catch (err) {
       res = err.toString();
     }
     return res;
