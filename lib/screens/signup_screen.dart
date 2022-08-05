@@ -1,9 +1,12 @@
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:photo_sharing_app/resources/auth_methods.dart';
+import 'package:photo_sharing_app/responsive/mobile_screen_layout.dart';
+import 'package:photo_sharing_app/responsive/responsive_layout_screen.dart';
+import 'package:photo_sharing_app/responsive/web_screen_layout.dart';
+import 'package:photo_sharing_app/screens/login_screen.dart';
 import 'package:photo_sharing_app/utils/colors.dart';
 import 'package:photo_sharing_app/utils/utils.dart';
 import 'package:photo_sharing_app/widgets/text_field_input.dart';
@@ -34,6 +37,11 @@ class _SignupScreen extends State<SignupScreen> {
     _reEnterPassword.dispose();
   }
 
+  void navigateToSignup() {
+    Navigator.of(this.context)
+        .push(MaterialPageRoute(builder: (context) => LoginScreen()));
+  }
+
   void selectImage() async {
     Uint8List image = await pickImage(ImageSource.gallery);
     setState(() {
@@ -57,9 +65,16 @@ class _SignupScreen extends State<SignupScreen> {
       _isLoading = false;
     });
     if (res != 'success') {
-      showSnackBar(res, context);
+      showSnackBar(res, this.context);
     } else {
-      showSnackBar('Profile Created', context);
+      showSnackBar('Profile Created', this.context);
+      Navigator.of(this.context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const ResponsiveLayout(
+              webScreenLayout: WebScreenLayout(),
+              mobileScreenLayout: MobileScreenLayout()),
+        ),
+      );
     }
   }
 
@@ -75,7 +90,7 @@ class _SignupScreen extends State<SignupScreen> {
             children: [
               Flexible(
                 child: Container(),
-                flex: 2,
+                flex: 1,
               ),
               //image
               SvgPicture.asset(
@@ -120,7 +135,7 @@ class _SignupScreen extends State<SignupScreen> {
                   hintText: 'enter your username here'),
               // password
               const SizedBox(
-                height: 24,
+                height: 12,
               ),
               //textfields for email
               TextFieldInput(
@@ -129,7 +144,7 @@ class _SignupScreen extends State<SignupScreen> {
                   hintText: 'enter your email here'),
               // password
               const SizedBox(
-                height: 24,
+                height: 12,
               ),
               TextFieldInput(
                 textInputType: TextInputType.text,
@@ -138,7 +153,7 @@ class _SignupScreen extends State<SignupScreen> {
                 hintText: 'enter your password here',
               ),
               const SizedBox(
-                height: 24,
+                height: 12,
               ),
               TextFieldInput(
                   textInputType: TextInputType.text,
@@ -147,7 +162,7 @@ class _SignupScreen extends State<SignupScreen> {
                   hintText: 're-enter your password'),
               // password
               const SizedBox(
-                height: 24,
+                height: 12,
               ),
               //textfield for bio
               TextFieldInput(
@@ -156,7 +171,7 @@ class _SignupScreen extends State<SignupScreen> {
                   hintText: 'enter your bio here'),
               // password
               const SizedBox(
-                height: 24,
+                height: 12,
               ),
 
               // the button
@@ -198,7 +213,7 @@ class _SignupScreen extends State<SignupScreen> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: navigateToSignup,
                     child: Container(
                       child: const Text(
                         "Login",

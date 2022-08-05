@@ -3,12 +3,19 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:photo_sharing_app/models/user.dart' as model;
 import 'package:photo_sharing_app/resources/storage_methods.dart';
 
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
+  Future<model.User> getUserDetails() async{
+    User currentUser = _auth.currentUser!;
+
+    DocumentSnapshot snapshot = await _firebaseFirestore.collection('users').doc(currentUser.uid).get();
+    return model.User.fromSnap(snapshot);
+  }
   // function for sign up the user.
   Future<String> signUpUser(
       {required String email,
@@ -30,28 +37,20 @@ class AuthMethods {
         String photoUrl = await StorageMethods()
             .uploadImageToStorage('profilePicture', file, false);
         // add user to our database
+        model.User user = model.User(
+          username: userName,
+          uid: credential.user!.uid,
+          email: email,
+          bio: bio,
+          photoUrl: photoUrl,
+          followers: [],
+          following: [],
+        );
+
         await _firebaseFirestore
             .collection('users')
             .doc(credential.user!.uid)
-            .set({
-          'username': userName,
-          'uid': credential.user!.uid,
-          'email': email,
-          'bio': bio,
-          'followers': [],
-          'following': [],
-          'photoUrl': photoUrl,
-        });
-        // another way of doing this
-        // await _firebaseFirestore.collection('users').add(
-        //  {
-        //    'username' : userName,
-        //    'uid' : credential.user!.uid,
-        //    'email' : email,
-        //    'bio' : bio,
-        //    'followers' : [],
-        //    'following' : [],
-        //  });
+            .set(user.toJson());
         res = "success";
       }
     } catch (err) {
