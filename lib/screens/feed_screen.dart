@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:photo_sharing_app/utils/colors.dart';
@@ -24,7 +25,23 @@ class FeedScreen extends StatelessWidget {
           ),
         ],
       ),
-      body:const PostCard(),
+      body: StreamBuilder(
+          stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+          builder: (context,
+          AsyncSnapshot<QuerySnapshot<Map<String,dynamic>>> snapshot){
+            if(snapshot.connectionState == ConnectionState.waiting){
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return ListView.builder(
+              itemCount: snapshot.data!.docs.length,//docs will give us list of document ids available and whereas length will give you length of postcards
+              itemBuilder: (context , index) => PostCard(
+                 //mentioning that these are data of our post
+                 snap:snapshot.data!.docs[index].data(),
+               ),
+            );
+          }),
     );
   }
 }
