@@ -42,4 +42,26 @@ class FirestoreMethods {
     }
     return res;
   }
+
+  Future<void> likePost(String postId, String uid, List likes) async {
+    try {
+      //if user has already liked the post in the past
+      if (likes.contains(uid)) {
+        await firebaseFirestore.collection('posts').doc(postId).update({
+          'likes':FieldValue.arrayRemove([uid]),
+          //so we will only go to the likes and remove the uid so as to show user that the user unliked the image
+
+        });
+      }else{
+        await firebaseFirestore.collection('posts').doc(postId).update({
+          'likes':FieldValue.arrayUnion([uid]),
+        });
+          };
+    } catch (e) {
+      //catch exception in string format
+      print(
+        e.toString(),
+      );
+    }
+  }
 }
