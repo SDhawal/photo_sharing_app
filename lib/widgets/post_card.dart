@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:photo_sharing_app/providers/user_provider.dart';
 import 'package:photo_sharing_app/resources/firestore_method.dart';
+import 'package:photo_sharing_app/screens/comments_screen.dart';
 import 'package:photo_sharing_app/utils/colors.dart';
 import 'package:photo_sharing_app/widgets/like_animation.dart';
 import 'package:provider/provider.dart';
@@ -157,7 +158,11 @@ class _PostCardState extends State<PostCard> {
                 ),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => CommentsScreen(),
+                  ),
+                ),
                 icon: Icon(
                   Icons.comment_outlined,
                 ),
