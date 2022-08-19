@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:photo_sharing_app/utils/colors.dart';
 
+import '../widgets/comments_card.dart';
+
 class CommentsScreen extends StatefulWidget {
   const CommentsScreen({Key? key}) : super(key: key);
 
@@ -17,6 +19,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
         title: const Text('Comments'),
         backgroundColor: mobileBackgroundColor,
       ),
+      body: CommentCard(),
       bottomNavigationBar: SafeArea(
         child: Container(
           height: kToolbarHeight,
