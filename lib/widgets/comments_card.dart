@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class CommentCard extends StatefulWidget {
-  const CommentCard({Key? key}) : super(key: key);
+  final snap;
+
+  const CommentCard({Key? key, required this.snap}) : super(key: key);
 
   @override
   State<CommentCard> createState() => _CommentCardState();
@@ -19,10 +22,11 @@ class _CommentCardState extends State<CommentCard> {
         children: [
           CircleAvatar(
             backgroundImage: NetworkImage(
-                'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80'),
+              widget.snap['profilePic'],
+            ),
             radius: 18,
           ),
-          Container(
+          Expanded(
             child: Padding(
               padding: const EdgeInsets.only(
                 left: 16,
@@ -36,19 +40,24 @@ class _CommentCardState extends State<CommentCard> {
                     text: TextSpan(
                       children: [
                         TextSpan(
-                          text: 'username',
-                          style: const TextStyle(fontWeight: FontWeight.bold,),
+                          text: '${widget.snap['name']}  ',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                         ),
                         TextSpan(
-                          text: 'description will be displayed here',
-                        ),
+                            text: widget.snap['text'],
+                            style: const TextStyle(
+                              color: Colors.white,
+                            )),
                       ],
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 4),
                     child: Text(
-                      '8/19/22',
+                      DateFormat.yMMMd().format(widget.snap['datePublished'].toDate()),
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w400,
